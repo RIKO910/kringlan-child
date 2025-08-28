@@ -219,23 +219,44 @@ function wxUpdateGiftCardMessage(textarea) {
     });
 }
 
-function gjafaReceipientInfo(qty){
-	let html='';
-	for(let i = 0; i<qty; i++){
-		html+=`<div class="gjafa_input_item_groups">
-			<div class="gjafa_input_item">
-				<input type="text" name="gjafa_name_field[]" id="gjafa_name_field_${i}" placeholder="Nafn" class="gjafa_input">
-			</div>
-			<div class="gjafa_input_item">
-				<input type="email" name="gjafa_email_field[]" id="gjafa_name_field${i}" placeholder="Netfang" class="gjafa_input">
-			</div>
-			<div class="gjafa_input_item">
-				<input type="tel" name="gjafa_telephone_field[]" id="gjafa_name_field${i}" placeholder="Símanúmer" class="gjafa_input">
-			</div>
-		</div>`;
-	}
-	
-	document.getElementById('receipent_info_area').innerHTML = html;
+function gjafaReceipientInfo(qty) {
+    const priceInputs = document.querySelectorAll('.gjafa_pice_input');
+    const qtyInputs   = document.querySelectorAll('.gjafa_qty_input');
+
+    let amountDistribution = [];
+
+    priceInputs.forEach((priceInput, index) => {
+        const amount = wxParseAmount(priceInput.value);
+        const quantity = parseInt(qtyInputs[index].value) || 0;
+
+        // Add this amount for the specified quantity
+        for (let i = 0; i < quantity; i++) {
+            amountDistribution.push(amount);
+        }
+    });
+
+    // Now generate the HTML with the correct amounts
+    let html = '';
+    for (let i = 0; i < qty; i++) {
+        const amount = i < amountDistribution.length ? amountDistribution[i] : '';
+
+        html += `<div class="gjafa_input_item_groups">
+            <div class="gjafa_input_item">
+                <input type="text" name="gjafa_name_field[]" id="gjafa_name_field_${i}" placeholder="Nafn" class="gjafa_input">
+            </div>
+            <div class="gjafa_input_item">
+                <input type="email" name="gjafa_email_field[]" id="gjafa_email_field_${i}" placeholder="Netfang" class="gjafa_input">
+            </div>
+            <div class="gjafa_input_item">
+                <input type="tel" name="gjafa_telephone_field[]" id="gjafa_telephone_field_${i}" placeholder="Símanúmer" class="gjafa_input">
+            </div>
+            <div class="gjafa_input_item">
+                <input type="hidden" name="gjafa_amount_field[]" value="${amount}" class="gjafa_input">
+            </div>
+        </div>`;
+    }
+
+    document.getElementById('receipent_info_area').innerHTML = html;
 }
 
 function gjafaBackToStepOne(button, event){

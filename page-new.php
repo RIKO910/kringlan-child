@@ -107,7 +107,7 @@
             </div>
         </section>
 
-        <!-- Electronic Gift Card section  -->
+        <!-- Electronic Gift Card section CSV upload  -->
         <section class="gjafa_sec_wrap gjafa_sec_electronic_giftcard" id="gjafa_sec_id_02" style="display:none;">
             <div class="gjafa_sec_container">
                 
@@ -185,12 +185,12 @@
                                     <div class="gjafa_options_box">
                                         <div class="gjafa_option_items">
                                             <label for="gjafa_radio_input" class="gjafa_single_option gjafa_radio_item">
-                                                <input type="radio" name="gjafa_radio_input" value="Núna" id="gjafa_radio_input" class="gjafa_radio_input" checked>
+                                                <input type="radio" name="gjafa_radio_input_getting_csv" value="Núna" id="gjafa_radio_input" class="gjafa_radio_input" checked>
                                                 Núna
                                             </label>
 
                                             <label for="gjafa_radio_input" class="gjafa_single_option gjafa_radio_item">
-                                                <input type="radio" name="gjafa_radio_input" value="Veldu tíma" id="gjafa_radio_input" class="gjafa_radio_input">
+                                                <input type="radio" name="gjafa_radio_input_getting_csv" value="Veldu tíma" id="gjafa_radio_input" class="gjafa_radio_input">
                                                 Veldu tíma
                                             </label>
                                         </div>
@@ -212,13 +212,13 @@
                                     <input type="text" name="gjafa_text_input" id="gjafa_text_input" class="gjafa_input gjafa_text_input" placeholder="Nafn">
                                     <div class="gjafa_radio_options">
                                         <div class="gjafa_radio_item">
-                                            <input type="radio" name="gjafa_radio_item" value="Sendu tölvupóst til viðtakanda" id="gjafa_radio_item" class="gjafa_radio_input">
+                                            <input type="radio" name="gjafa_radio_item_email_phone_csv" value="Sendu tölvupóst til viðtakanda" id="gjafa_radio_item" class="gjafa_radio_input" checked>
                                             <label for="gjafa_radio_item" class="gjafa_radio_label">
                                                 Sendu tölvupóst til viðtakanda
                                             </label>
                                         </div>
                                         <div class="gjafa_radio_item">
-                                            <input type="radio" name="gjafa_radio_item" value="Sendu sms & tölvupóst til viðtakanda" id="gjafa_radio_item" class="gjafa_radio_input">
+                                            <input type="radio" name="gjafa_radio_item_email_phone_csv" value="Sendu sms & tölvupóst til viðtakanda" id="gjafa_radio_item" class="gjafa_radio_input">
                                             <label for="gjafa_radio_item" class="gjafa_radio_label">
                                                 Sendu sms & tölvupóst til viðtakanda
                                             </label>
@@ -236,7 +236,7 @@
             </div>
         </section>
 
-        <!-- Electronic Gift Card section  -->
+        <!-- Electronic Gift Card section manual input -->
         <section class="gjafa_sec_wrap gjafa_sec_electronic_giftcard" id="gjafa_sec_id_03" style="display:none;">
             <div class="gjafa_sec_container">
                 
@@ -316,12 +316,12 @@
                                     <div class="gjafa_options_box">
                                         <div class="gjafa_option_items">
                                             <label for="gjafa_radio_input" class="gjafa_single_option gjafa_radio_item">
-                                                <input type="radio" name="gjafa_radio_input" value="Núna" id="gjafa_radio_input" class="gjafa_radio_input" checked>
+                                                <input type="radio" name="gjafa_radio_input_getting" value="Núna" id="gjafa_radio_input" class="gjafa_radio_input" checked>
                                                 Núna
                                             </label>
 
                                             <label for="gjafa_radio_input" class="gjafa_single_option gjafa_radio_item">
-                                                <input type="radio" name="gjafa_radio_input" value="Veldu tíma" id="gjafa_radio_input" class="gjafa_radio_input">
+                                                <input type="radio" name="gjafa_radio_input_getting" value="Veldu tíma" id="gjafa_radio_input" class="gjafa_radio_input">
                                                 Veldu tíma
                                             </label>
                                         </div>
@@ -343,13 +343,13 @@
                                     <input type="text" name="gjafa_text_input" id="gjafa_text_input" class="gjafa_input gjafa_text_input" placeholder="Nafn">
                                     <div class="gjafa_radio_options">
                                         <div class="gjafa_radio_item">
-                                            <input type="radio" name="gjafa_radio_item" value="Sendu tölvupóst til viðtakanda" id="gjafa_radio_item" class="gjafa_radio_input">
+                                            <input type="radio" name="gjafa_radio_item_email_phone" value="Sendu tölvupóst til viðtakanda" id="gjafa_radio_item" class="gjafa_radio_input" checked>
                                             <label for="gjafa_radio_item" class="gjafa_radio_label">
                                                 Sendu tölvupóst til viðtakanda
                                             </label>
                                         </div>
                                         <div class="gjafa_radio_item">
-                                            <input type="radio" name="gjafa_radio_item" value="Sendu sms & tölvupóst til viðtakanda" id="gjafa_radio_item" class="gjafa_radio_input">
+                                            <input type="radio" name="gjafa_radio_item_email_phone" value="Sendu sms & tölvupóst til viðtakanda" id="gjafa_radio_item" class="gjafa_radio_input">
                                             <label for="gjafa_radio_item" class="gjafa_radio_label">
                                                 Sendu sms & tölvupóst til viðtakanda
                                             </label>
