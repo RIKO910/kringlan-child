@@ -190,11 +190,11 @@
                                             </label>
 
                                             <label for="gjafa_radio_input" class="gjafa_single_option gjafa_radio_item">
-                                                <input type="radio" name="gjafa_radio_input_getting_csv" value="Veldu tíma" id="gjafa_radio_input" class="gjafa_radio_input">
+                                                <input type="radio" name="gjafa_radio_input_getting_csv" value="Veldu tíma" id="gjafa_radio_input" class="gjafa_radio_input gjafa_radio_getting_time_csv">
                                                 Veldu tíma
                                             </label>
                                         </div>
-                                        <div class="gjafa_option_items">
+                                        <div class="gjafa_option_items getting-date-time-csv" style="display: none">
                                             <div class="gjafa_single_option">
                                                 <input type="date" name="gjafa_date_input" id="gjafa_date_input" class="gjafa_input gjafa_date_input" onchange="gjafaDateInputHandler(this, event)">
                                             </div>
@@ -321,11 +321,11 @@
                                             </label>
 
                                             <label for="gjafa_radio_input" class="gjafa_single_option gjafa_radio_item">
-                                                <input type="radio" name="gjafa_radio_input_getting" value="Veldu tíma" id="gjafa_radio_input" class="gjafa_radio_input">
+                                                <input type="radio" name="gjafa_radio_input_getting" value="Veldu tíma" id="gjafa_radio_input" class="gjafa_radio_input gjafa_radio_getting_time">
                                                 Veldu tíma
                                             </label>
                                         </div>
-                                        <div class="gjafa_option_items">
+                                        <div class="gjafa_option_items getting-date-time" style="display: none">
                                             <div class="gjafa_single_option">
                                                 <input type="date" name="gjafa_date_input" id="gjafa_date_input" class="gjafa_input gjafa_date_input" onchange="gjafaDateInputHandler(this, event)">
                                             </div>

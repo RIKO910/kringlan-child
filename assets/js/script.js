@@ -270,3 +270,31 @@ function gjafaBackToStepOne(button, event){
 function gjafaCheckoutOneHandler(button, event){
 	alert("Further tasks under progress!");
 }
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    const radioscsv = document.querySelectorAll('input[name="gjafa_radio_input_getting_csv"]');
+    const dateTimeBoxcsv = document.querySelector('.getting-date-time-csv');
+    const radios = document.querySelectorAll('input[name="gjafa_radio_input_getting"]');
+    const dateTimeBox = document.querySelector('.getting-date-time');
+
+    radioscsv.forEach(radio => {
+        radio.addEventListener('change', function () {
+            if (this.classList.contains('gjafa_radio_getting_time_csv')) {
+                dateTimeBoxcsv.style.display = 'flex';
+            } else {
+                dateTimeBoxcsv.style.display = 'none';
+            }
+        });
+    });
+
+    radios.forEach(radio => {
+        radio.addEventListener('change', function () {
+            if (this.classList.contains('gjafa_radio_getting_time')) {
+                dateTimeBox.style.display = 'flex';
+            } else {
+                dateTimeBox.style.display = 'none';
+            }
+        });
+    });
+});
