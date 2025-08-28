@@ -1341,5 +1341,172 @@ add_action('wp_ajax_process_gift_card_order', 'process_gift_card_order');
 add_action('wp_ajax_nopriv_process_gift_card_order', 'process_gift_card_order');
 
 function process_gift_card_order(){
-    wp_send_json_success("work on server");
+    if ( is_session_started() === FALSE ) session_start();
+    // Initialize arrays
+    $receiver_names   = [];
+    $receiver_phones  = [];
+    $receiver_emails  = [];
+
+    $csv_uploaded = false;
+
+    // Process CSV file if uploaded
+    if (!empty($_FILES['receiver_file']['tmp_name'])) {
+        $csv_uploaded = true;
+        $file = fopen($_FILES['receiver_file']['tmp_name'], 'r');
+
+        if ($file !== FALSE) {
+            // Read and check if first row is a header
+            $firstRow = fgetcsv($file);
+            $isHeader = false;
+
+            if ($firstRow !== FALSE) {
+                $firstValue = strtolower(trim($firstRow[0]));
+                $isHeader = ($firstValue === 'nafn' || $firstValue === 'name');
+            }
+
+            // If it's not a header, process the first row
+            if (!$isHeader && !empty($firstRow[0])) {
+                $receiver_names[]   = sanitize_text_field($firstRow[0]);
+                $receiver_emails[]  = isset($firstRow[1]) ? sanitize_email($firstRow[1]) : '';
+                $receiver_phones[]  = isset($firstRow[2]) ? sanitize_text_field($firstRow[2]) : '';
+            }
+
+            // Process the remaining rows
+            while (($row = fgetcsv($file)) !== FALSE) {
+                if (empty($row[0])) continue;
+
+                $receiver_names[]   = sanitize_text_field($row[0]);
+                $receiver_emails[]  = isset($row[1]) ? sanitize_email($row[1]) : '';
+                $receiver_phones[]  = isset($row[2]) ? sanitize_text_field($row[2]) : '';
+            }
+
+            fclose($file);
+        }
+    }
+
+    // Process manual entries ONLY if no CSV was uploaded
+    if (!$csv_uploaded && isset($_POST['receiver_name']) && is_array($_POST['receiver_name'])) {
+        foreach ($_POST['receiver_name'] as $index => $name) {
+            if (!empty($name)) {
+                $receiver_names[]   = sanitize_text_field($name);
+                $receiver_emails[]  = isset($_POST['receiver_email'][$index]) ? sanitize_email($_POST['receiver_email'][$index]) : '';
+                $receiver_phones[]  = isset($_POST['receiver_phone'][$index]) ? sanitize_text_field($_POST['receiver_phone'][$index]) : '';
+            }
+        }
+    }
+
+    // Rest of your code remains the same...
+    // Debug: Check what we've collected
+    error_log('Receiver names: ' . print_r($receiver_names, true));
+    error_log('Receiver emails: ' . print_r($receiver_emails, true));
+    error_log('Receiver phones: ' . print_r($receiver_phones, true));
+    error_log('CSV uploaded: ' . ($csv_uploaded ? 'Yes' : 'No'));
+    error_log('Total recipients: ' . count($receiver_names));
+
+
+    // Validate all recipients have emails
+    foreach ($receiver_emails as $i => $email) {
+        if (empty($email)) {
+            wp_send_json_error(sprintf('Missing email for recipient %d', $i+1));
+            wp_die();
+        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            wp_send_json_error(sprintf('Invalid email format for recipient %d: %s', $i+1, $email));
+            wp_die();
+        }
+    }
+
+    // Validate phone numbers if SMS notification is selected
+    $notification_preference = sanitize_text_field($_POST['notification_preference']);
+    if ($notification_preference === 'Sendu sms & tölvupóst til viðtakanda') {
+        foreach ($receiver_phones as $i => $phone) {
+            if (empty($phone)) {
+                wp_send_json_error(sprintf('Missing phone number for recipient %d (SMS notification selected)', $i+1));
+                wp_die();
+            }
+        }
+    }
+
+    // Validate we have recipients
+    if (empty($receiver_names)) {
+        wp_send_json_error('No recipients provided (either via form or CSV file)');
+        wp_die();
+    }
+
+    // Process card data
+    $card_numbers = isset($_POST['card_no']) ? array_map('intval', $_POST['card_no']) : [];
+    $card_prices = isset($_POST['card_price']) ? array_map('floatval', $_POST['card_price']) : [];
+
+    // Validate counts
+    if (count($card_numbers) !== count($card_prices)) {
+        wp_send_json_error('Card numbers and prices count mismatch');
+        wp_die();
+    }
+
+    $total_cards = array_sum($card_numbers);
+    if ($total_cards !== count($receiver_names)) {
+        wp_send_json_error(sprintf(
+            'Recipient count (%d) does not match total cards (%d)',
+            count($receiver_names),
+            $total_cards
+        ));
+        wp_die();
+    }
+
+    // Handle date/time - fix the time assignment
+    $gift_card_date = date('d/m/Y');
+    $gift_card_time = date('H:i:s');
+
+    if (!empty($_POST["gift_card_date"])) {
+        $gift_card_date = date("d/m/Y", strtotime($_POST["gift_card_date"]));
+    }
+
+    if (!empty($_POST["gift_card_time"])) {
+        $gift_card_time = date("H:i:s", strtotime($_POST["gift_card_time"]));
+    }
+
+    // Prepare data
+    $product_id              = 6340;
+    $sender_name             = sanitize_text_field($_POST['sender_name']);
+    $right_now_or_not        = sanitize_text_field($_POST['right_now_or_not']);
+    $notification_preference = sanitize_text_field($_POST['notification_preference']);
+    $receiver_message        = sanitize_text_field($_POST['receiver_message']);
+
+    // Clear any existing gift cards in cart
+    foreach (WC()->cart->get_cart() as $cart_item_key => $cart_item) {
+        if ($cart_item['product_id'] == $product_id) {
+            WC()->cart->remove_cart_item($cart_item_key);
+        }
+    }
+
+    // Add items to cart
+    $current_recipient = 0;
+    foreach ($card_numbers as $index => $quantity) {
+        for ($i = 0; $i < $quantity; $i++) {
+            if (!isset($receiver_names[$current_recipient])) break;
+
+            $meta = [
+                'gift_card_amount' => $card_prices[$index],
+                'gift_card_recipient_name' => $receiver_names[$current_recipient],
+                'gift_card_phone' => $receiver_phones[$current_recipient],
+                'gift_card_sender_name' => $sender_name,
+                'gift_card_image' => '',
+                'unique_key' => md5(microtime() . rand()),
+                'send_mail_to_recipient' => ($notification_preference === 'Sendu tölvupóst til viðtakanda') ? 1 : 2,
+                'gift_card_date' => $gift_card_date,
+                'gift_card_time' => $gift_card_time,
+                'gift_card_recipient_email' => $receiver_emails[$current_recipient],
+                'gift_card_custome_message' => $receiver_message
+            ];
+
+            $_SESSION['lb_gift_card_add_to_cart_'.$product_id] = $meta;
+            WC()->cart->add_to_cart($product_id, 1, 0, [], $meta);
+            $current_recipient++;
+        }
+    }
+
+    wp_send_json_success([
+        'redirect' => wc_get_cart_url(),
+        'message' => 'Pöntun móttekin!'
+    ]);
+    wp_die();
 }

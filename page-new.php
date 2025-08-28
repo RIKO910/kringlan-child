@@ -538,6 +538,243 @@
     <script src="<?php echo get_stylesheet_directory_uri();?>/assets/js/script.js?v=<?php echo time();?>"></script>
 
     <script>
+
+        // Add this function to handle CSV upload validation and processing
+        function gjafaUploadFileHandler(input, event) {
+            event.preventDefault();
+
+            const file = input.files[0];
+            if (!file) return;
+
+            // Validate file type
+            if (!file.name.endsWith('.csv')) {
+                alert('Vinsamlegast veldu CSV skrá');
+                input.value = '';
+                return;
+            }
+
+            // Read and process the CSV file
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const csvData = e.target.result;
+                    const rows = csvData.split('\n');
+                    const recipients = [];
+
+                    // Process each row (skip header if exists)
+                    for (let i = 0; i < rows.length; i++) {
+                        const row = rows[i].trim();
+                        if (!row) continue;
+
+                        const columns = row.split(',').map(col => col.trim().replace(/^"|"$/g, ''));
+
+                        // Skip empty rows or potential header
+                        if (i === 0 && (columns[0] === 'nafn' || columns[0] === 'name')) continue;
+
+                        if (columns[0]) {
+                            recipients.push({
+                                name: columns[0],
+                                email: columns[1] || '',
+                                phone: columns[2] || ''
+                            });
+                        }
+                    }
+
+                    // Validate we have recipients
+                    if (recipients.length === 0) {
+                        alert('Engir viðtakandi fannst í CSV skránni');
+                        return;
+                    }
+
+                    // Store the CSV data for later use
+                    window.csvRecipients = recipients;
+                } catch (error) {
+                    console.error('Error processing CSV:', error);
+                    alert('Villa kom upp við vinnslu CSV skráar');
+                }
+            };
+
+            reader.onerror = function() {
+                alert('Villa kom upp við lestur skráar');
+            };
+
+            reader.readAsText(file);
+        }
+
+        // Update the CSV section validation function
+        function gjafaCheckoutOneHandler(button, event) {
+            event.preventDefault();
+
+            if (!validateCsvGiftCardForm()) {
+                return false;
+            }
+
+            const formData = prepareCsvFormData();
+            submitCsvGiftCardOrder(formData);
+        }
+
+        function validateCsvGiftCardForm() {
+            let isValid = true;
+            const errorMessages = [];
+
+            // Check if CSV file was uploaded and has recipients
+            if (!window.csvRecipients || window.csvRecipients.length === 0) {
+                errorMessages.push('Vinsamlegast hlaðið upp CSV skrá með viðtakendum');
+                isValid = false;
+            } else {
+                // Validate CSV recipients
+                window.csvRecipients.forEach((recipient, index) => {
+                    if (!recipient.name.trim()) {
+                        errorMessages.push(`Vinsamlegast fylltu út nafn viðtakanda ${index + 1} í CSV skránni`);
+                        isValid = false;
+                    }
+
+                    if (!recipient.email.trim()) {
+                        errorMessages.push(`Vinsamlegast fylltu út netfang viðtakanda ${index + 1} í CSV skránni`);
+                        isValid = false;
+                    } else if (!isValidEmail(recipient.email)) {
+                        errorMessages.push(`Netfang viðtakanda ${index + 1} í CSV skránni er ekki gilt`);
+                        isValid = false;
+                    }
+
+                    // Check if SMS option is selected, then validate phone
+                    const emailAndPhone = document.querySelector('#gjafa_sec_id_02 input.gjafa_radio_item_email_and_phone:checked');
+                    if (emailAndPhone) {
+                        if (!recipient.phone.trim()) {
+                            errorMessages.push(`Vinsamlegast fylltu út símanúmer viðtakanda ${index + 1} í CSV skránni`);
+                            isValid = false;
+                        } else {
+                            const phoneRegex = /^[0-9]{7,15}$/;
+                            if (!phoneRegex.test(recipient.phone)) {
+                                errorMessages.push(`Símanúmer viðtakanda ${index + 1} í CSV skránni er ekki gilt`);
+                                isValid = false;
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Validate sender information
+            const senderName = document.getElementById('gjafa_text_input_csv');
+            if (!senderName.value.trim()) {
+                errorMessages.push('Vinsamlegast fylltu út nafn sendanda');
+                isValid = false;
+            }
+
+            // Validate delivery time if "Veldu tíma" is selected
+            const timeRadio = document.querySelector('#gjafa_sec_id_02 input.gjafa_radio_getting_time_csv:checked');
+            if (timeRadio) {
+                const dateInput = document.getElementById('gjafa_date_input_csv');
+                const timeInput = document.getElementById('gjafa_time_input_csv');
+
+                if (!dateInput.value) {
+                    errorMessages.push('Vinsamlegast veldu dagsetningu fyrir sendingu');
+                    isValid = false;
+                }
+
+                if (!timeInput.value) {
+                    errorMessages.push('Vinsamlegast veldu tíma fyrir sendingu');
+                    isValid = false;
+                }
+            }
+
+            // Show error messages if any
+            if (errorMessages.length > 0) {
+                alert(errorMessages.join('\n'));
+            }
+
+            return isValid;
+        }
+
+        function prepareCsvFormData() {
+            const formData = new FormData();
+
+            // Add CSV file if available
+            const fileInput = document.getElementById('gjafa_file_input');
+            if (fileInput.files.length > 0) {
+                formData.append('receiver_file', fileInput.files[0]);
+            }
+
+            // Add recipient data from CSV
+            window.csvRecipients.forEach((recipient, index) => {
+                formData.append(`receiver_name[${index}]`, recipient.name);
+                formData.append(`receiver_phone[${index}]`, recipient.phone);
+                formData.append(`receiver_email[${index}]`, recipient.email);
+            });
+
+            // Get card data from first section
+            const priceInputs = document.querySelectorAll('.gjafa_pice_input');
+            const qtyInputs = document.querySelectorAll('.gjafa_qty_input');
+
+            priceInputs.forEach((input, index) => {
+                const amount = wxParseAmount(input.value);
+                const quantity = parseInt(qtyInputs[index].value) || 0;
+
+                formData.append(`card_no[${index}]`, quantity);
+                formData.append(`card_price[${index}]`, amount);
+            });
+
+            // Get message
+            const message = document.querySelector('#gjafa_sec_id_02 .gjafa_textarea_csv').value;
+            formData.append('receiver_message', message);
+
+            // Get delivery timing
+            const deliveryOption = document.querySelector('#gjafa_sec_id_02 input[name="gjafa_radio_input_getting_csv"]:checked').value;
+            formData.append('right_now_or_not', deliveryOption);
+
+            if (deliveryOption === 'Veldu tíma') {
+                const date = document.getElementById('gjafa_date_input_csv').value;
+                const time = document.getElementById('gjafa_time_input_csv').value;
+                formData.append('gift_card_date', date);
+                formData.append('gift_card_time', time);
+            }
+
+            // Get sender information
+            const senderName = document.getElementById('gjafa_text_input_csv').value;
+            formData.append('sender_name', senderName);
+
+            // Get notification preference
+            const notificationPreference = document.querySelector('#gjafa_sec_id_02 input[name="gjafa_radio_item_email_phone_csv"]:checked').value;
+            formData.append('notification_preference', notificationPreference);
+
+            formData.append('action', 'process_gift_card_order');
+
+            return formData;
+        }
+
+        function submitCsvGiftCardOrder(formData) {
+            // Show loading indicator
+            const submitButton = document.querySelector('#gjafa_sec_id_02 .gjafa_btn[onclick="gjafaCheckoutOneHandler(this, event)"]');
+            const originalText = submitButton.textContent;
+            submitButton.textContent = 'Vinsamlegast bíðið...';
+            submitButton.disabled = true;
+
+            // Make AJAX request
+            const ajaxUrl = '<?php echo admin_url("admin-ajax.php"); ?>';
+            fetch(ajaxUrl, {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Redirect to cart page
+                        window.location.href = data.data.redirect;
+                    } else {
+                        alert('Villa kom upp: ' + data.data);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Villa kom upp við vinnslu pöntunar');
+                })
+                .finally(() => {
+                    // Restore button state
+                    submitButton.textContent = originalText;
+                    submitButton.disabled = false;
+                });
+        }
+
         // Manual Input 2nd form validate and ajax call
 
         function gjafaCheckoutTwoHandler(button, event) {
@@ -630,6 +867,7 @@
             return emailRegex.test(email);
         }
 
+        // Update the manual form submission to match the PHP handler
         function prepareFormData() {
             const formData = new FormData();
 
@@ -639,31 +877,37 @@
             const phones = document.querySelectorAll('input[name="gjafa_telephone_field[]"]');
             const amounts = document.querySelectorAll('input[name="gjafa_amount_field[]"]');
 
-            const recipients = [];
-            for (let i = 0; i < names.length; i++) {
-                recipients.push({
-                    name: names[i].value,
-                    email: emails[i].value,
-                    phone: phones[i].value,
-                    amount: amounts[i].value
-                });
-            }
+            names.forEach((input, index) => {
+                formData.append(`receiver_name[${index}]`, input.value);
+                formData.append(`receiver_email[${index}]`, emails[index].value);
+                formData.append(`receiver_phone[${index}]`, phones[index].value);
+            });
 
-            formData.append('recipients', JSON.stringify(recipients));
+            // Get card data (already in the right format from first section)
+            const priceInputs = document.querySelectorAll('.gjafa_pice_input');
+            const qtyInputs = document.querySelectorAll('.gjafa_qty_input');
+
+            priceInputs.forEach((input, index) => {
+                const amount = wxParseAmount(input.value);
+                const quantity = parseInt(qtyInputs[index].value) || 0;
+
+                formData.append(`card_no[${index}]`, quantity);
+                formData.append(`card_price[${index}]`, amount);
+            });
 
             // Get message
             const message = document.querySelector('.gjafa_textarea').value;
-            formData.append('message', message);
+            formData.append('receiver_message', message);
 
             // Get delivery timing
             const deliveryOption = document.querySelector('input[name="gjafa_radio_input_getting"]:checked').value;
-            formData.append('delivery_option', deliveryOption);
+            formData.append('right_now_or_not', deliveryOption);
 
             if (deliveryOption === 'Veldu tíma') {
                 const date = document.getElementById('gjafa_date_input').value;
                 const time = document.getElementById('gjafa_time_input').value;
-                formData.append('delivery_date', date);
-                formData.append('delivery_time', time);
+                formData.append('gift_card_date', date);
+                formData.append('gift_card_time', time);
             }
 
             // Get sender information
@@ -673,11 +917,13 @@
             // Get notification preference
             const notificationPreference = document.querySelector('input[name="gjafa_radio_item_email_phone"]:checked').value;
             formData.append('notification_preference', notificationPreference);
+
             formData.append('action', 'process_gift_card_order');
 
             return formData;
         }
 
+        // Update the manual form submission function
         function submitGiftCardOrder(formData) {
             // Show loading indicator
             const submitButton = document.querySelector('#gjafa_sec_id_03 .gjafa_btn[onclick="gjafaCheckoutTwoHandler(this, event)"]');
@@ -694,12 +940,10 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        // Redirect to payment page or show success message
-                        alert('Pöntun tókst! Beðið er um greiðslu.');
-                        console.log('Order data:', data.data);
-                        // window.location.href = data.data.redirect_url; // Uncomment if you have a redirect URL
+                        // Redirect to cart page
+                        window.location.href = data.data.redirect;
                     } else {
-                        alert('Villa kom upp: ' + data.data.message);
+                        alert('Villa kom upp: ' + data.data);
                     }
                 })
                 .catch(error => {
