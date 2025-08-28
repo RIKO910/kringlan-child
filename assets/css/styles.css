@@ -1,0 +1,526 @@
+/* Google Fonts  */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+
+/* CSS Predefine Variables  */
+:root {
+
+    /* Backgrounds */
+    --gjafa-bg-primary: rgba(39, 58, 120, 1); 
+    --gjafa-bg-secondary: rgba(234, 238, 246, 1); 
+    --gjafa-bg-light: rgba(248, 250, 251, 1); 
+
+    /* Border */
+    --gjafa-border-primary: rgba(39, 58, 120, 1); 
+    --gjafa-border-secondary: rgba(0, 0, 0, 1); 
+    --gjafa-border-light: rgba(224, 229, 239, 1);
+    
+    /* Border Radius */
+    --gjafa-radius-sm: 2px;
+    --gjafa-radius-md: 5px;
+    --gjafa-radius-lg: 10px;
+    --gjafa-radius-xl: 16px;
+    --gjafa-radius-xxl: 25px;
+    --gjafa-radius-2xl: 50px;
+
+
+    /* Font Sizes */
+    --gjafa-size-extra-base: 13px;
+    --gjafa-size-base: 16px;
+    --gjafa-size-extra-sm: 20px;
+    --gjafa-size-sm: 24px;
+    --gjafa-size-md: 32px;
+    --gjafa-size-lg: 36px;
+    --gjafa-size-xl: 42px;
+    --gjafa-size-2xl: 48px;
+    --gjafa-size-3xl: 60px;
+
+
+    /* Padding & Margin Sizes */
+    --gjafa-spacing-base: 5px;
+    --gjafa-spacing-exta-sm: 10px;
+    --gjafa-spacing-sm: 15px;
+    --gjafa-spacing-md: 20px;
+    --gjafa-spacing-lg: 25px;
+    --gjafa-spacing-xl: 30px;
+    --gjafa-spacing-2xl: 36px;
+    --gjafa-spacing-3xl: 48px;
+    --gjafa-spacing-3xx: 60px;
+
+     /* Outer shadow */
+    --gjafa-shadow-outer: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px; 
+
+    /* Inner shadow */
+    --gjafa-shadow-inner: inset rgba(0, 0, 0, 0.2) 0px 1px 5px, inset rgba(0, 0, 0, 0.3) 0px -1px 5px; 
+    
+    /* Text Shadow Variables */
+    --gjafa-text-shadow-light: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    --gjafa-text-shadow-dark: 3px 3px 6px rgba(0, 0, 0, 0.3);
+    --gjafa-text-shadow-strong: 4px 4px 8px rgba(0, 0, 0, 0.5);
+
+}
+
+
+/* Close Icon Created Styles */
+.gjafa_close_icon_box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    border: 1px solid #000;
+    border-radius: 50px;
+    transition: all 0.3s;
+}
+
+.gjafa_close_icon {
+    position: relative;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+}
+
+.gjafa_close_icon::before,
+.gjafa_close_icon::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 2px;
+    height: 100%;
+    background-color: #333; /* Change color if needed */
+    transform-origin: center;
+    transition: background-color 0.3s;
+}
+
+.gjafa_close_icon::before {
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.gjafa_close_icon::after {
+    transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+/* Hover effect */
+.gjafa_close_icon_box:hover {
+    border-color: red;
+}
+.gjafa_close_icon_box:hover .gjafa_close_icon::before,
+.gjafa_close_icon_box:hover .gjafa_close_icon::after {
+  background-color: red;
+}
+
+
+/* ===========================
+* BASIC TYPOGRAPHY CSS START
+*======================== */
+
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+section,
+article,
+figure{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+.gjafa_anchor {
+    text-decoration: none;
+}
+.gjafa_btn,
+.gjafa_input,
+.gjafa_textarea,
+.gjafa_input_label {
+    border: none;
+    outline: none;
+    display: block;
+}
+
+
+/* basic button styles  */
+.gjafa_btn,
+.gjafa_input,
+.gjafa_textarea {
+    padding: var(--gjafa-spacing-exta-sm) var(--gjafa-spacing-sm);
+    border: 1px solid var(--gjafa-border-primary);
+    border-radius: var(--gjafa-radius-lg);
+    font-size: var(--gjafa-size-base);
+    color: #1c1c1c;
+    background: transparent;
+    transition: all .3s ease-in;
+    /*cursor: pointer;*/
+    text-align: center;
+    
+}
+
+.require{
+    color: red;
+}
+
+.gjafa_btn:hover {
+    color: #ffffff;
+    border-color: var(--gjafa-border-light);
+    background: var(--gjafa-bg-primary);
+}
+
+
+.img_wrap{
+    margin: 0;
+}
+.gjafa_img{
+    width: 100%;
+    height: auto;
+    display: inline-block;
+}
+
+.gjafa_sec_wrap {
+    padding-top: var(--gjafa-spacing-3xl);
+    position: relative;
+    font-family: "Roboto", sans-serif;
+}
+.gjafa_sec_container {
+    max-width: 1340px;
+    width: 100%;
+    height: 100%;
+    margin: 0px auto;
+    padding: 0px var(--gjafa-spacing-sm);
+}
+.gjafa_sec_row {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--gjafa-spacing-md);
+}
+
+.gjafa_sec_column {
+    flex-basis: 46%;
+}
+.gjafa_sec_column.gjafa_left_column {
+    flex-basis: 35%;
+}
+.gjafa_sec_column.gjafa_right_column {
+    flex: 1;
+}
+
+.gjafa_heading{
+    font-size: var(--gjafa-size-sm);
+    font-weight: 500;
+    line-height: 1.5;
+    padding: 0;
+    margin: 0;
+    margin-bottom: var(--gjafa-spacing-exta-sm);
+}
+
+.gjafa_sec_desc {
+    font-size: var(--gjafa-size-base);
+    line-height: 1.5;
+}
+
+.gjafa_item_wrap {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: var(--gjafa-spacing-md);
+}
+.gjafa_radio_box {
+    display: flex;
+    flex-direction: column;
+}
+
+/* ===========================
+* BASIC TYPOGRAPHY CSS END
+*======================== */
+
+
+/* ===========================
+* SECTION 01 STYLES START 
+*======================== */
+.gjafa_sec_buy_giftcard .gjafa_sec_row {
+    max-width: 800px;
+    margin: 0px auto;
+}
+.gjafa_sec_buy_giftcard .gjafa_left_column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.gjafa_sec_buy_giftcard .gjafa_heading_box {
+    max-width: 800px;
+    margin: 0px auto;
+    margin-bottom: var(--gjafa-spacing-lg);
+}
+.gjafa_sec_buy_giftcard .img_wrap {
+    max-width: 150px;
+    width: 100%;
+}
+
+.gjafa_column_contents,
+.gjafa_single_item {
+    max-width: 800px;
+    width: 100%;
+}
+
+.gjafa_input_item_box {
+    display: flex;
+    align-items: center;
+    margin-top: 15px;
+    gap: 10%;
+    flex-wrap: wrap;
+}
+.gjafa_input_item_box:first-child {
+    margin-top: 0;
+}
+
+
+/* .gjafa_input_item:nth-child(1) {
+    margin-right: 10%;
+}
+.gjafa_input_item:nth-child(2) {
+    margin-left: 10%;
+    margin-right: 2%;
+} */
+
+.gjafa_input_item .gjafa_input {
+    max-width: 180px;
+}
+.gjafa_btn_box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+
+/* ===========================
+* SECTION 01 STYLES END 
+*======================== */
+
+/* ===========================
+* SECTION 02 STYLES START 
+*======================== */
+
+.gjafa_sec_electronic_giftcard .gjafa_sec_column.gjafa_right_column {
+    margin-left: var(--gjafa-spacing-md);
+}
+/* =========================
+* left column styles here 
+*===================== */
+.gjafa_sec_electronic_giftcard .gjafa_column_heading_box {
+    margin-bottom: var(--gjafa-spacing-lg);
+}
+.gjafa_column_heading_box {
+    display: flex;
+    align-items: center;
+}
+
+.gjafa_column_heading_box .img_wrap {
+    max-width: 150px;
+    width: 100%;
+}
+.gjafa_pdf_card {
+    max-width: 650px;
+    box-sizing: border-box;
+    border: 1px solid var(--gjafa-border-primary);
+    color: #1c1c1c;
+}
+
+/* PDF Card Styles Here */
+.gjafa_pdf_card_header{
+    width: 100%;
+}
+.gjafa_pdf_card_header .img_wrap {
+    width: 100%;
+}
+.gjafa_pdf_card_header .pdf_thumb {
+    width: 100%;
+    height: auto;
+}
+
+.gjafa_pdf_card_body {
+    margin: 0px;
+    text-align: center;
+    padding: var(--gjafa-spacing-sm) var(--gjafa-spacing-2xl);
+}
+
+.gjafa_pdf_price_box {
+    font-size: var(--gjafa-size-lg);
+    font-weight: 500;
+    margin-bottom: var(--gjafa-spacing-lg);
+}
+
+.gjafa_pdf_code_type_box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.gjafa_pdf_qrcode {
+    width: 100px;
+    height: 100px;
+    margin-bottom: var(--gjafa-spacing-md);
+}
+
+.gjafa_pdf_qrcode .qrcode_image {
+    width: 100%;
+    height: auto;
+}
+
+
+.gjafa_pdf_barcode .barcode_image{
+    width: 100%;
+    height: 50px;
+}
+
+.gjafa_pdf_card_footer {
+    padding: var(--gjafa-spacing-sm) var(--gjafa-spacing-2xl);
+    margin-bottom: 0;
+}
+
+.gjafa_pdf_card_footer .pdf_desc {
+    margin: 0;
+    text-align: center;
+}
+
+
+/* ============================
+* right column styles here 
+*========================= */
+
+.gjafa_sec_electronic_giftcard .gjafa_single_item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+}
+
+.gjafa_single_item .gjafa_textarea {
+    border-radius: 0;
+    text-align: left;
+    resize: vertical;
+}
+
+.gjafa_options_box,
+.gjafa_option_items {
+    display: flex;
+    align-items: center;
+    gap: var(--gjafa-spacing-md);
+}
+.gjafa_options_box .gjafa_time_input {
+    padding-top: var(--gjafa-spacing-exta-sm);
+    padding-bottom: var(--gjafa-spacing-exta-sm);
+    margin-left: var(--gjafa-spacing-md);
+}
+.gjafa_single_item .gjafa_text_input {
+    margin: var(--gjafa-spacing-exta-sm) 0px;
+    display: block;
+}
+.gjafa_file_upload_box {
+    position: relative;
+    border: 1px solid var(--gjafa-border-primary);
+    border-radius: var(--gjafa-radius-lg);
+    max-width: 180px;
+    text-align: center;
+}
+.gjafa_file_upload_box .upload_image{
+    width: 36px;
+}
+.gjafa_file_input_label {
+    display: block;
+}
+.gjafa_file_input {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    opacity: 0;
+    cursor: pointer;
+}
+.gjafa_sec_desc {
+    margin: 0;
+    margin-top: var(--gjafa-spacing-sm);
+}
+
+.gjafa_input_item_groups {
+    display: flex;
+    align-items: center;
+    gap: var(--gjafa-spacing-md);
+	margin-bottom:5px;
+}
+
+
+/* ===========================
+* SECTION 02 STYLES END 
+*======================== */
+
+/* ===========================
+* SECTION 03 STYLES START 
+*======================== */
+.spacing_mb_30 {
+    margin-bottom: var(--gjafa-spacing-xl);
+}
+.gjafa_heading.left_spacing {
+    margin-left: 10%;
+}
+/* column left styles here  */
+.image_box_item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.image_box_item > .img_wrap{
+    width: 180px;
+}
+.image_box_item .img_thumb{
+    width: 100%;
+}
+
+/* column right styles here  */
+.gjafa_btn_groups_box {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    max-width: 400px;
+    gap: var(--gjafa-spacing-md);
+
+}
+.gjafa_btn_groups_box .gjafa_btn_groups{
+    flex-basis: 50%;
+}
+.gjafa_btn_groups_box .gjafa_input {
+    width: 80%;
+    margin-bottom: var(--gjafa-spacing-md);
+}
+
+
+/* ===========================
+* SECTION 03 STYLES END 
+*======================== */
+
+
+/* ===========================
+* Remove buttton start
+*======================== */
+
+.gjafa_remove_btn {
+    background: skyblue;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.gjafa_remove_btn:hover {
+    background: slategray;
+}
+
+/* ===========================
+* Remove buttton end
+*======================== */

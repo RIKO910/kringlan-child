@@ -1,0 +1,461 @@
+/**
+Theme Name: Kringlan Child
+Author: Suhan Alam Rana
+Author URI: https://leikbreytir.is
+Description: Custom Theme
+Version: 1.0.0
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: kringlan-child
+Template: astra
+*/
+
+
+/*==== Header section ===*/
+
+.ast-above-header-bar .site-above-header-wrap {
+    max-height: 70px !important;
+}
+#masthead .ast-container, .site-header-focus-item + .ast-breadcrumbs-wrapper {
+    max-width: 100%;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+}
+/*==== Header Menu my Favorite Icon ===*/
+
+.Media-my-favorite-color {
+	display: block;
+}
+img.wp-image-818.size-full {
+	width: 10%;
+	margin-right: 12px;
+}
+figure.wp-block-media-text__media {
+    text-align: right;
+	padding-left: 16px;
+}
+.wp-block-media-text__content {
+text-align: right;	padding: 0px !important;
+}
+section#block-17 {
+    margin-top: 20px;
+}
+.Media-my-favorite-color img.wp-image-818.size-full:hover {
+    transition:0.5s;
+}
+p.my-favorite-love-icon.has-white-color.has-text-color a:hover {
+    color: #fff !important;
+}
+
+.Media-my-favorite-color img.wp-image-818.size-full:hover {
+    scale: 1.2;
+}
+
+
+/*=== Headar Search Bar ====*/
+.ast-search-menu-icon.slide-search .search-form {
+    visibility: visible;
+    opacity: 1;
+}
+.ast-search-menu-icon .search-field {
+    width: 200px;
+}
+.ast-builder-layout-element.ast-flex.site-header-focus-item.ast-header-search {
+    margin-right: 24px;
+}
+input[type=search]:focus {
+    outline: none !important;
+}
+input[type=search]{
+	height: 42px !important;
+}
+
+/*=== Header Top Bar Icon ===*/
+.font-awesome-bar-icon i.fas.fa-bars {
+    color: #fff;
+    font-size: 18px;
+}
+
+/*==== HEader Menu ====*/
+
+.main-header-menu.ast-menu-shadow .menu-item a.menu-link {
+    padding-right: 0px;
+    letter-spacing: 0.8px;
+    font-weight: 500;
+}
+.main-header-menu.ast-menu-shadow .menu-item a.menu-link:hover {
+ color:#8f97b0;
+
+}
+
+.kringlukst-menu-text a.menu-link::before {
+    content: url(https://leikbreytir.com/dev/kringlan/wp-content/uploads/2022/10/Bagsolidmini.png);
+    margin-right: 5px;
+}
+.kringlukst-menu-text a.menu-link {
+    background: #c3203c;
+    padding: 3px 10px 0px 7px !important;
+	border-bottom: 2px solid transparent;
+	transition: 0.5s;
+}
+.kringlukst-menu-text a.menu-link:hover {
+ color:#fff !important;
+	border-bottom:2px solid #fff;
+}
+
+
+
+
+.main-header-menu .service-time-information a.menu-link::before {
+    content: url(https://leikbreytir.com/dev/kringlan/wp-content/uploads/2022/10/clock-solid-mini.png);
+    margin-right: 34px;
+    margin-top: 5px;
+}
+.service-time-information a.menu-link {
+    background: #18244b;
+    padding: 5px 17px 5px 17px !important;
+}
+
+.main-header-menu .service-time-information a.menu-link:hover {
+ color:#8f97b0;
+}
+
+/*==== footer content ====*/
+.footer-menu-bottom a.menu-link::before {
+    content: '•';
+    padding-right: 18px;
+    color: #fff;
+    opacity: 0.5;
+}
+.astra-footer-horizontal-menu li a.menu-link {
+    font-weight: 500;
+}
+.ast-footer-copyright p {
+    font-weight: 500;
+}
+
+
+/*=== footer background image all section ====*/
+
+.widget.widget_block {
+    margin-bottom: 0px;
+}
+p.has-ast-global-color-5-color.has-text-color {
+    font-weight: 500;
+}
+.footer-ul-li-content {
+    display: flex;
+}
+.footer-two-clumon {
+    padding-right: 116px;
+}
+.footer-ul-li-content ul li {
+    font-size: 20px;
+    color: #fff;
+    font-weight: 500;
+}
+.footer-ul-li-content ul li a {
+    color: #fff;
+    transition: 0.5s;
+}
+.footer-ul-li-content ul li a {
+    color:#fff;
+    transition: 0.5s;
+}
+.footer-ul-li-content ul li a:hover {
+    color: #c3203c;
+}
+li.mail-bottom-border {
+    border-bottom: 1px solid #ccc;
+}
+a.ast-facebook.footer-social-item {
+    padding-right: 105px;
+	padding-left: 0px;
+}
+span.social-item-label::after {
+    content: url(https://leikbreytir.com/dev/kringlan/wp-content/uploads/2022/10/left-arrow.png);
+    position: relative;
+    top: 3px;
+    left: 8px;
+}
+.ast-builder-social-element .social-item-label {
+    padding-left: 0px !important;
+    margin-left: 8px;
+}
+span.social-item-label {
+    border-bottom: 1px solid;
+    padding-bottom: 8px;
+    position: relative;
+    top: 6px;
+}
+span.social-item-label:hover {
+    color: #c3203c !important;
+}
+
+
+
+/*==== 3rd header menu hide show ====*/
+
+/*====== 3rd header display none ====*/
+.ast-below-header-wrap {
+    display: none;
+}
+
+.ast-builder-layout-element.ast-flex.site-header-focus-item.ast-header-html-2 {
+    position: absolute;
+    top: 23%;
+	    border-right: 1px solid rgb(176 176 176 / 30%);
+    padding-right: 150px;
+    height: 30em;
+}
+.header-hide-show-menu-ul-li-content {
+    display: flex;
+}
+.header-hide-show-menu-img-logo img {
+    max-width: 26%;
+}
+.header-hide-show-menu-img-logo {
+    margin-top: 82px;
+}
+.header-hide-show-menu-ul-li-content ul li {
+    padding: 14px 0px;
+}
+
+.ast-header-html.inner-link-style- h2 {
+    padding: 50px 0px 30px 50px;
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 29px;
+    letter-spacing: 1px;
+    color: #133b7b;
+}
+.header-hide-show-menu-ul-li-content ul {
+    list-style: none;
+}
+.header-hide-show-menu-two-clumon {
+    margin-right: -100px;
+}
+.header-hide-show-menu-ul-li-content ul li a {
+    font-size: 28px;
+    font-weight: 300;
+    padding: 27px 0px 23px 0px;
+    color: #133b7b;
+    transition: 0.5s;
+}
+.header-hide-show-menu-ul-li-content ul li a:hover {
+    color: #c3203c;
+}
+
+/*=== social icon ====*/
+
+section#astra-widget-social-profiles-4 ul li a {
+    font-size: 12px;
+    background: #f4f5f8;
+    color: #133b7b;
+    padding: 3px 0px 3px 6px;
+    transition: background .5s ease;
+}
+section#astra-widget-social-profiles-4 ul li a:hover {
+    background: #eaecf2;
+    color: #c3203c;
+}
+section#astra-widget-social-profiles-4 li {
+    margin-right: 10px;
+}
+section#astra-widget-social-profiles-4 li:first-child {
+    border-right: 1px solid #f4f5f8;
+    padding-right: 14px;
+}
+
+section#astra-widget-social-profiles-4 li:nth-child(4) {
+    display: none;
+}
+a:where(:not(.wp-element-button)) {
+    text-decoration: none !important;
+}
+/*===== Kringlan & Verslanir menu =====*/
+/*==== Html Ul Li kringlan ====*/
+.kringlan-menu-content {
+    position: relative;
+    top: 15px;
+}
+.header-kringlan-menu-ul-li-content {
+    display: flex;
+}
+
+.kringlan-menu-content h2 {
+    padding: 0px 0px 30px 0px;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 29px;
+    letter-spacing: 1px;
+    color: #133b7b;
+}
+.header-kringlan-menu-ul-li-content ul li a {
+    font-weight: 300;
+    color: #133b7b;
+	transition:0.3s;
+}
+.header-kringlan-menu-ul-li-content ul li a:hover {
+    color: #c3203c;
+}
+.header-kringlan-menu-ul-li-content-two-clumon {
+    padding-right: 80px;
+}
+
+/*==== Html Ul Li verslanir ====*/
+
+.verslanir-menu-content {
+    position: relative;
+    top: 30px;
+}
+.verslanir-menu-content h2{
+    padding: 0px 0px 18px 0px;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 29px;
+    letter-spacing: 1px;
+    color: #133b7b;
+}
+.header-verslanir-menu-ul-li-content {
+    display: flex;
+}
+.header-verslanir-menu-ul-li-content ul li a {
+    font-weight: 300;
+    color: #133b7b;
+}
+.header-verslanir-menu-ul-li-content ul li a:hover {
+    color: #c3203c;
+	transition:0.3s;
+}
+.header-verslanir-menu-ul-li-content-two-clumon {
+    padding-right: 95px;
+}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+/*=== Tab Device Responcive====*/
+@media screen and (min-device-width: 768px) and (max-device-width: 1024px) { 
+    
+/*==== Header first menu tect====*/
+	.kringlukst-menu-text a.menu-link {
+    color: #fff;
+		padding-left: 20px !important;
+}
+
+/*==== footer content ====*/
+section#block-37 {
+    width: 450px;
+}
+.footer-bottom-logo-image {
+    text-align: left;
+}
+p.has-ast-global-color-5-color.has-text-color {
+    text-align: left;
+}
+.footer-ul-li-content {
+    text-align: left;
+}
+	.footer-two-clumon {
+    padding-right: 0px;
+}
+.footer-two-clumon.two-number-clumon {
+    padding-left: 100px;
+}
+.footer-social-inner-wrap.ast-social-stack-none {
+    text-align: left;
+}
+ul#astra-footer-menu {
+    display: flex;
+}
+.footer-menu-bottom a.menu-link::before {
+    padding-right: 8px !important;
+}
+.astra-footer-horizontal-menu .menu-item a {
+    padding: 0px 16px 0px 0px !important;
+    font-size: 16px !important;
+}
+.site-footer-primary-section-1.site-footer-section.site-footer-section-1 {
+    width: 370px;
+}
+
+	
+}
+
+/*=== Mobile Device Responcive====*/
+@media screen and (max-device-width: 767px) { 
+    
+/*==== Header first menu tect====*/
+	.kringlukst-menu-text a.menu-link {
+    color: #fff;
+		padding-left: 20px !important;
+	}
+	
+
+/*==== footer content ====*/
+.site-above-footer-wrap.site-footer-focus-item.ast-builder-grid-row-2-equal.ast-footer-row-mobile-stack {
+    overflow: hidden !important;
+}
+	
+	section#block-37 {
+    width: 450px;
+}
+.footer-bottom-logo-image {
+    text-align: left;
+}
+p.has-ast-global-color-5-color.has-text-color {
+    text-align: left;
+}
+p.has-ast-global-color-5-color.has-text-color {
+    padding-right: 108px;
+}
+.footer-ul-li-content {
+    text-align: left;
+}
+	.footer-two-clumon {
+    padding-right: 0px;
+}
+.footer-two-clumon.two-number-clumon {
+    padding-left: 25px;
+}
+.footer-social-inner-wrap.ast-social-stack-none {
+    text-align: left;
+}
+a.ast-facebook.footer-social-item {
+    padding-right: 23px;
+}
+ul#astra-footer-menu {
+    display: flex;
+	justify-content: center;
+}
+.footer-menu-bottom a.menu-link::before {
+    padding-right: 1px !important;
+}
+.astra-footer-horizontal-menu .menu-item a {
+    padding: 0px 8px 0px 0px !important;
+    font-size: 16px !important;
+}
+.ast-footer-copyright p {
+    text-align: center !important;
+}
+
+}

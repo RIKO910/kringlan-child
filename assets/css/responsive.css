@@ -1,0 +1,98 @@
+/* ==================================
+RESPONSIVE STYLES START HERE  
+=======================================*/
+
+@media screen and (min-width: 320px) and (max-device-width: 575px) {
+    .gjafa_sec_row {
+        flex-wrap: wrap;
+    }
+    .gjafa_sec_row > .gjafa_sec_column {
+        flex-basis: 100%;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    .gjafa_sec_buy_giftcard .img_wrap {
+        width: 50%;
+    }
+    .gjafa_textarea {
+        width: 100%;
+    }
+    .gjafa_options_box, .gjafa_option_items {
+        flex-wrap: wrap;
+    }
+    .gjafa_add_more_btn_gropus_wrapper,
+    .gjafa_btn_groups_box .gjafa_input {
+        width: 100%;
+    }
+    .gjafa_column_heading_box,
+    .gjafa_input_item_groups,
+    .gjafa_btn_box {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .gjafa_add_more_btn_gropus_wrapper .gjafa_btn_box {
+        margin-top: var(--gjafa-spacing-md);
+        margin-bottom: 0;
+    }
+    .gjafa_input_box_items .gjafa_input_box,
+    .gjafa_add_more_btn_gropus_wrapper .gjafa_btn {
+        flex-basis: 100%;
+    }
+    .gjafa_options_box .gjafa_time_input {
+        margin-left: 0;
+    }
+    .gjafa_input_item:nth-child(1) {
+        margin-bottom: 10px;
+    }
+
+    .gjafa_heading.left_spacing {
+        margin-left: 0;
+    }
+    .image_box_item {
+        justify-content: flex-start;
+    }
+
+}
+@media screen and (min-width: 576px) and (max-device-width: 767px) {
+    .gjafa_sec_row {
+        flex-wrap: wrap;
+        text-align: center;
+    }
+    .gjafa_sec_row > .gjafa_sec_column{
+        flex-basis: 100%;
+    }
+
+}
+
+
+@media screen and (min-width: 768px) and (max-device-width: 991px){
+    .gjafa_sec_row {
+        flex-wrap: wrap;
+    }
+    .gjafa_input_item_box {
+        gap: 7%;
+    }
+    .gjafa_sec_buy_giftcard .gjafa_sec_column.gjafa_left_column {
+        flex-basis: 35%;
+    }
+    .gjafa_sec_column.gjafa_left_column {
+        flex-basis: 100%;
+    }
+    .gjafa_heading.left_spacing {
+        margin-left: 0;
+    }
+    .image_box_item {
+        justify-content: flex-start;
+    }
+
+    .gjafa_sec_desc {
+        max-width: 600px;
+    }
+
+}
+
+@media screen and (min-width: 992px) and (max-device-width: 1200px) {
+
+
+
+}
