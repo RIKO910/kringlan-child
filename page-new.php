@@ -174,7 +174,7 @@
                                         <h2 class="gjafa_heading">Viltu skrifa kveðju?</h2>
                                         <span class="gjafa_subheading">Skilaboð sem birtast á gjafakorti og í SMS</span>
                                     </div>
-                                    <textarea name="" id="" cols="50" rows="5" class="gjafa_textarea" onkeyup="wxUpdateGiftCardMessage(this)"
+                                    <textarea name="" id="" cols="50" rows="5" class="gjafa_textarea_csv" onkeyup="wxUpdateGiftCardMessage(this)"
           oninput="wxUpdateGiftCardMessage(this)"
           onpaste="wxUpdateGiftCardMessage(this)"
           oncut="wxUpdateGiftCardMessage(this)"></textarea>
@@ -196,10 +196,10 @@
                                         </div>
                                         <div class="gjafa_option_items getting-date-time-csv" style="display: none">
                                             <div class="gjafa_single_option">
-                                                <input type="date" name="gjafa_date_input" id="gjafa_date_input" class="gjafa_input gjafa_date_input" onchange="gjafaDateInputHandler(this, event)">
+                                                <input type="date" name="gjafa_date_input_csv" id="gjafa_date_input_csv" class="gjafa_input gjafa_date_input_csv" onchange="gjafaDateInputHandler(this, event)">
                                             </div>
                                             <div class="gjafa_single_option">
-                                                <input type="time" name="gjafa_time_input" id="gjafa_time_input" class="gjafa_input gjafa_time_input" onchange="gjafaTimeInputHandler(this, event)">
+                                                <input type="time" name="gjafa_time_input_csv" id="gjafa_time_input_csv" class="gjafa_input gjafa_time_input_csv" onchange="gjafaTimeInputHandler(this, event)">
                                             </div>
                                         </div>
                                     </div>
@@ -209,7 +209,7 @@
                                         <h2 class="gjafa_heading">Upplýsingar um þig</h2>
                                         <span class="gjafa_subheading">Mikilvægt að setja nafn þitt hér svo að viðtakandi viti frá hverjum gjöfin er.</span>
                                     </div>
-                                    <input type="text" name="gjafa_text_input" id="gjafa_text_input" class="gjafa_input gjafa_text_input" placeholder="Nafn">
+                                    <input type="text" name="gjafa_text_input_csv" id="gjafa_text_input_csv" class="gjafa_input gjafa_text_input_csv" placeholder="Nafn">
                                     <div class="gjafa_radio_options">
                                         <div class="gjafa_radio_item">
                                             <input type="radio" name="gjafa_radio_item_email_phone_csv" value="Sendu tölvupóst til viðtakanda" id="gjafa_radio_item" class="gjafa_radio_input" checked>
@@ -218,7 +218,7 @@
                                             </label>
                                         </div>
                                         <div class="gjafa_radio_item">
-                                            <input type="radio" name="gjafa_radio_item_email_phone_csv" value="Sendu sms & tölvupóst til viðtakanda" id="gjafa_radio_item" class="gjafa_radio_input">
+                                            <input type="radio" name="gjafa_radio_item_email_phone_csv" value="Sendu sms & tölvupóst til viðtakanda" id="gjafa_radio_item" class="gjafa_radio_input gjafa_radio_item_email_and_phone">
                                             <label for="gjafa_radio_item" class="gjafa_radio_label">
                                                 Sendu sms & tölvupóst til viðtakanda
                                             </label>
@@ -349,7 +349,7 @@
                                             </label>
                                         </div>
                                         <div class="gjafa_radio_item">
-                                            <input type="radio" name="gjafa_radio_item_email_phone" value="Sendu sms & tölvupóst til viðtakanda" id="gjafa_radio_item" class="gjafa_radio_input">
+                                            <input type="radio" name="gjafa_radio_item_email_phone" value="Sendu sms & tölvupóst til viðtakanda" id="gjafa_radio_item" class="gjafa_radio_input gjafa_radio_item_email_and_phone">
                                             <label for="gjafa_radio_item" class="gjafa_radio_label">
                                                 Sendu sms & tölvupóst til viðtakanda
                                             </label>
@@ -536,5 +536,182 @@
     </main>
     
     <script src="<?php echo get_stylesheet_directory_uri();?>/assets/js/script.js?v=<?php echo time();?>"></script>
+
+    <script>
+        // Manual Input 2nd form validate and ajax call
+
+        function gjafaCheckoutTwoHandler(button, event) {
+            event.preventDefault();
+            if (!validateGiftCardForm()) {
+                return false;
+            }
+
+            const formData = prepareFormData();
+            submitGiftCardOrder(formData);
+        }
+
+        function validateGiftCardForm() {
+            let isValid = true;
+            const errorMessages = [];
+
+            // Validate recipient information
+            const nameFields = document.querySelectorAll('input[name="gjafa_name_field[]"]');
+            const emailFields = document.querySelectorAll('input[name="gjafa_email_field[]"]');
+            const phoneFields = document.querySelectorAll('input[name="gjafa_telephone_field[]"]');
+            const emailAndPhone = document.querySelector('input.gjafa_radio_item_email_and_phone:checked');
+
+
+            nameFields.forEach((field, index) => {
+                if (!field.value.trim()) {
+                    errorMessages.push(`Vinsamlegast fylltu út nafn viðtakanda ${index + 1}`);
+                    isValid = false;
+                }
+            });
+
+            emailFields.forEach((field, index) => {
+                const email = field.value.trim();
+                if (!email) {
+                    errorMessages.push(`Vinsamlegast fylltu út netfang viðtakanda ${index + 1}`);
+                    isValid = false;
+                } else if (!isValidEmail(email)) {
+                    errorMessages.push(`Netfang viðtakanda ${index + 1} er ekki gilt`);
+                    isValid = false;
+                }
+            });
+
+            if (emailAndPhone) {
+                phoneFields.forEach((field, index) => {
+                    const phone = field.value.trim();
+                    const phoneRegex = /^[0-9]{7,15}$/;
+                    if (!phone) {
+                        errorMessages.push(`Vinsamlegast fylltu út símanúmer viðtakanda ${index + 1}`);
+                        isValid = false;
+                    } else if (!phoneRegex.test(phone)) {
+                        errorMessages.push(`Símanúmer viðtakanda ${index + 1} er ekki gilt`);
+                        isValid = false;
+                    }
+                });
+            }
+
+            // Validate sender information
+            const senderName = document.getElementById('gjafa_text_input');
+            if (!senderName.value.trim()) {
+                errorMessages.push('Vinsamlegast fylltu út nafn sendanda');
+                isValid = false;
+            }
+
+            // Validate delivery time if "Veldu tíma" is selected
+            const timeRadio = document.querySelector('input.gjafa_radio_getting_time:checked');
+            if (timeRadio) {
+                const dateInput = document.getElementById('gjafa_date_input');
+                const timeInput = document.getElementById('gjafa_time_input');
+
+                if (!dateInput.value) {
+                    errorMessages.push('Vinsamlegast veldu dagsetningu fyrir sendingu');
+                    isValid = false;
+                }
+
+                if (!timeInput.value) {
+                    errorMessages.push('Vinsamlegast veldu tíma fyrir sendingu');
+                    isValid = false;
+                }
+            }
+
+            // Show error messages if any
+            if (errorMessages.length > 0) {
+                alert(errorMessages.join('\n'));
+            }
+
+            return isValid;
+        }
+
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        function prepareFormData() {
+            const formData = new FormData();
+
+            // Get recipient information
+            const names = document.querySelectorAll('input[name="gjafa_name_field[]"]');
+            const emails = document.querySelectorAll('input[name="gjafa_email_field[]"]');
+            const phones = document.querySelectorAll('input[name="gjafa_telephone_field[]"]');
+            const amounts = document.querySelectorAll('input[name="gjafa_amount_field[]"]');
+
+            const recipients = [];
+            for (let i = 0; i < names.length; i++) {
+                recipients.push({
+                    name: names[i].value,
+                    email: emails[i].value,
+                    phone: phones[i].value,
+                    amount: amounts[i].value
+                });
+            }
+
+            formData.append('recipients', JSON.stringify(recipients));
+
+            // Get message
+            const message = document.querySelector('.gjafa_textarea').value;
+            formData.append('message', message);
+
+            // Get delivery timing
+            const deliveryOption = document.querySelector('input[name="gjafa_radio_input_getting"]:checked').value;
+            formData.append('delivery_option', deliveryOption);
+
+            if (deliveryOption === 'Veldu tíma') {
+                const date = document.getElementById('gjafa_date_input').value;
+                const time = document.getElementById('gjafa_time_input').value;
+                formData.append('delivery_date', date);
+                formData.append('delivery_time', time);
+            }
+
+            // Get sender information
+            const senderName = document.getElementById('gjafa_text_input').value;
+            formData.append('sender_name', senderName);
+
+            // Get notification preference
+            const notificationPreference = document.querySelector('input[name="gjafa_radio_item_email_phone"]:checked').value;
+            formData.append('notification_preference', notificationPreference);
+            formData.append('action', 'process_gift_card_order');
+
+            return formData;
+        }
+
+        function submitGiftCardOrder(formData) {
+            // Show loading indicator
+            const submitButton = document.querySelector('#gjafa_sec_id_03 .gjafa_btn[onclick="gjafaCheckoutTwoHandler(this, event)"]');
+            const originalText = submitButton.textContent;
+            submitButton.textContent = 'Vinsamlegast bíðið...';
+            submitButton.disabled = true;
+
+            // Make AJAX request
+            const ajaxUrl = '<?php echo admin_url("admin-ajax.php"); ?>';
+            fetch(ajaxUrl, {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Redirect to payment page or show success message
+                        alert('Pöntun tókst! Beðið er um greiðslu.');
+                        console.log('Order data:', data.data);
+                        // window.location.href = data.data.redirect_url; // Uncomment if you have a redirect URL
+                    } else {
+                        alert('Villa kom upp: ' + data.data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Villa kom upp við vinnslu pöntunar');
+                })
+                .finally(() => {
+                    // Restore button state
+                    submitButton.textContent = originalText;
+                    submitButton.disabled = false;
+                });
+        }
+    </script>
 </body>
 </html>

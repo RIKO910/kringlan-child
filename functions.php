@@ -1335,3 +1335,11 @@ function display_special_message_for_product_meta( $item_id, $item, $product ) {
         }
     }
 }
+
+// Add AJAX handler for gift card orders
+add_action('wp_ajax_process_gift_card_order', 'process_gift_card_order');
+add_action('wp_ajax_nopriv_process_gift_card_order', 'process_gift_card_order');
+
+function process_gift_card_order(){
+    wp_send_json_success("work on server");
+}
