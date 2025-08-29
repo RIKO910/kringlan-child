@@ -1510,3 +1510,100 @@ function process_gift_card_order(){
     ]);
     wp_die();
 }
+
+// Handle gift card order processing for envelope amd deck of card
+add_action('wp_ajax_process_gift_card_order_deck_envelope', 'process_gift_card_order_deck_envelope');
+add_action('wp_ajax_nopriv_process_gift_card_order_deck_envelope', 'process_gift_card_orderprocess_gift_card_order_deck_envelope');
+
+function process_gift_card_order_deck_envelope() {
+    // Verify nonce for security
+    if (!wp_verify_nonce($_POST['nonce'], 'process_gift_card_order_nonce_deck_envelope')) {
+        wp_send_json_error('Ógild öryggisauðkenni');
+        return;
+    }
+
+    // Get the gift cards data
+    $gift_cards = json_decode(stripslashes($_POST['gift_cards']), true);
+    $card_type = sanitize_text_field($_POST['card_type']);
+    $gift_card_product_id = null;
+
+    if (empty($gift_cards)) {
+        wp_send_json_error('Engin gjafakort fyllt út');
+        return;
+    }
+
+    // Clear the cart first
+    WC()->cart->empty_cart();
+
+    // Product ID for gift cards
+    if ($card_type === 'Gjafakort í umslagi'){
+        $gift_card_product_id = 6411;
+    }elseif ($card_type === 'Gjafakort í spilastokki'){
+        $gift_card_product_id = 6413;
+    }else{
+        wp_send_json_error('product id not found');
+    }
+
+
+    // Add each gift card to cart
+    foreach ($gift_cards as $gift_card) {
+        $amount = floatval($gift_card['amount']);
+        $quantity = intval($gift_card['quantity']);
+
+        if ($amount > 0 && $quantity > 0) {
+            // Add to cart with custom price
+            $cart_item_data = array(
+                'gift_card_amount' => $amount,
+                'gift_card_type' => $card_type
+            );
+
+            WC()->cart->add_to_cart($gift_card_product_id, $quantity, 0, array(), $cart_item_data);
+        }
+    }
+
+    // Set custom prices for the items
+    foreach (WC()->cart->get_cart() as $cart_item_key => $cart_item) {
+        if (isset($cart_item['gift_card_amount'])) {
+            $cart_item['data']->set_price($cart_item['gift_card_amount']);
+        }
+    }
+
+    // Return success with redirect URL
+    wp_send_json_success(array(
+        'redirect_url' => wc_get_checkout_url()
+    ));
+}
+
+// Set custom price for gift card products in cart
+add_action('woocommerce_before_calculate_totals', 'set_custom_gift_card_prices', 10, 1);
+function set_custom_gift_card_prices($cart) {
+    if (is_admin() && !defined('DOING_AJAX')) {
+        return;
+    }
+
+    foreach ($cart->get_cart() as $cart_item) {
+        if (isset($cart_item['gift_card_amount'])) {
+            $cart_item['data']->set_price($cart_item['gift_card_amount']);
+        }
+    }
+}
+
+// Display gift card details in cart
+add_filter('woocommerce_get_item_data', 'display_gift_card_details_in_cart', 10, 2);
+function display_gift_card_details_in_cart($item_data, $cart_item) {
+    if (isset($cart_item['gift_card_amount'])) {
+        $item_data[] = array(
+            'name' => 'Upphæð',
+            'value' => wc_price($cart_item['gift_card_amount'])
+        );
+    }
+
+    if (isset($cart_item['gift_card_type'])) {
+        $item_data[] = array(
+            'name' => 'Tegund',
+            'value' => $cart_item['gift_card_type']
+        );
+    }
+
+    return $item_data;
+}

@@ -161,6 +161,12 @@ figure{
     color: red;
 }
 
+.gjafa_btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: #ccc;
+}
+
 .gjafa_btn:hover {
     color: #ffffff;
     border-color: var(--gjafa-border-light);
