@@ -163,6 +163,14 @@
                                             <input type="file" name="gjafa_file_input" id="gjafa_file_input" class="gjafa_input gjafa_file_input" onchange="gjafaUploadFileHandler(this, event)">
                                         </figure>
 
+                                        <div id="csv-file-info" style="display: none; margin-top: 15px; padding: 10px; background: #f8f8f8; border-radius: 5px; max-width: 50%">
+                                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                                <span id="csv-file-name" style="font-weight: bold;"></span>
+                                                <button type="button" onclick="removeCsvFile()" style="background: #ff4444; color: white; border: none; padding: 1px 5px; border-radius: 50%; cursor: pointer;">&times;</button>
+                                            </div>
+                                            <div id="csv-recipient-count" style="margin-top: 5px; font-size: 14px;"></div>
+                                        </div>
+
                                         <div class="gjafa_sec_desc">
                                            Viðtakandi fær gjafakortið sent í tölvupósti og/eða með sms skilaboðum. Ef þú vilt frekar prenta það út og færa þeim sem á að fá gjöfina frá þér þá skráir þú sjálfan þig sem viðtakanda og færð gjafakortið sent tilbúið til prentunar.
                                         </div>
@@ -588,6 +596,14 @@
 
                     // Store the CSV data for later use
                     window.csvRecipients = recipients;
+
+                    // Show file information
+                    document.getElementById('csv-file-name').textContent = file.name;
+                    document.getElementById('csv-recipient-count').textContent =
+                        recipients.length + ' viðtakandi fannst í skránni';
+                    document.getElementById('csv-file-info').style.display = 'block';
+
+
                 } catch (error) {
                     console.error('Error processing CSV:', error);
                     alert('Villa kom upp við vinnslu CSV skráar');
@@ -599,6 +615,13 @@
             };
 
             reader.readAsText(file);
+        }
+
+        function removeCsvFile() {
+            const fileInput = document.getElementById('gjafa_file_input');
+            fileInput.value = '';
+            document.getElementById('csv-file-info').style.display = 'none';
+            window.csvRecipients = [];
         }
 
         // Update the CSV section validation function
