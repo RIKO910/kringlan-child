@@ -31,13 +31,24 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 <div class="" style="display: flex; width: 100%">
     <div style="width: 35%; padding:20px;">
         <ul style="list-style:none; padding:0; margin:0;">
-            <?php foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) :
+            <?php
+            $displayed_products = array();
+            foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) :
                 $_product   = $cart_item['data'];
                 $product_id = $cart_item['product_id'];
 
+                // Skip if we've already displayed this product
+                if (in_array($product_id, $displayed_products)) {
+                    continue;
+                }
+
                 if ( $_product && $_product->exists() && $cart_item['quantity'] > 0 ) :
-                    $thumbnail = $_product->get_image( 'woocommerce_thumbnail' );
+                    $thumbnail = $_product->get_image( 'woocommerce_full' );
                     $product_name = $_product->get_name();
+
+                    // Add to displayed products array
+                    $displayed_products[] = $product_id;
+
                     ?>
                     <li style="align-items:center;">
                         <div style="margin-right:15px;">
