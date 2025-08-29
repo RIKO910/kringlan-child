@@ -1607,3 +1607,40 @@ function display_gift_card_details_in_cart($item_data, $cart_item) {
 
     return $item_data;
 }
+
+// Register custom order status
+function register_custom_order_status() {
+    register_post_status('wc-pending-custom', array(
+        'label'                     => 'Pending',
+        'public'                    => true,
+        'exclude_from_search'       => false,
+        'show_in_admin_all_list'    => true,
+        'show_in_admin_status_list' => true,
+        'label_count'               => _n_noop('Pending <span class="count">(%s)</span>', 'Pending <span class="count">(%s)</span>')
+    ));
+}
+add_action('init', 'register_custom_order_status');
+
+// Add custom status to order status list
+function add_custom_order_status($order_statuses) {
+    $new_order_statuses = array();
+
+    foreach ($order_statuses as $key => $status) {
+        $new_order_statuses[$key] = $status;
+        if ('wc-processing' === $key) {
+            $new_order_statuses['wc-pending-custom'] = 'Pending';
+        }
+    }
+
+    return $new_order_statuses;
+}
+add_filter('wc_order_statuses', 'add_custom_order_status');
+
+// Change status to custom pending when ANY order is completed
+function change_to_custom_pending_on_completion($order_id, $old_status, $new_status) {
+    if ($new_status === 'completed') {
+        $order = wc_get_order($order_id);
+        $order->update_status('pending-custom', 'Order completed, moved to custom pending status.');
+    }
+}
+add_action('woocommerce_order_status_changed', 'change_to_custom_pending_on_completion', 10, 3);
